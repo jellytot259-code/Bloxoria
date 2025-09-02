@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Bloxoria Revival</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+<style>
+  body, html {
+    height: 100%;
+    margin: 0;
+    font-family: 'Arial Black', Arial, sans-serif;
+    background: url('https://media.moddb.com/images/games/1/50/49900/scr2.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: #000;
+  }
+  .top-bar {
+    background: white;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    user-select: none;
+  }
+  .top-bar .logo-btn {
+    background-color: #ff0000;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    padding: 6px 14px;
+    border-radius: 3px;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.2s;
+  }
+  .top-bar .logo-btn:hover {
+    background-color: #cc0000;
+  }
+  .top-bar .search-bar {
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+  .top-bar input[type="text"] {
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px 0 0 3px;
+    outline: none;
+    width: 180px;
+    font-size: 14px;
+  }
+  .top-bar button.search-btn {
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-left: none;
+    background-color: #eee;
+    cursor: pointer;
+    border-radius: 0 3px 3px 0;
+    font-weight: bold;
+    font-size: 14px;
+    transition: background-color 0.2s;
+  }
+  .top-bar button.search-btn:hover {
+    background-color: #ddd;
+  }
+  .container-login, .container-home {
+    min-height: calc(100vh - 50px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+  .login-card, .home-card {
+    background: white;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+    max-width: 480px;
+    width: 100%;
+    text-align: center;
+  }
+  .login-card h1, .home-card h1 {
+    font-weight: 900;
+    font-size: 28px;
+    margin-bottom: 24px;
+    color: #222;
+    user-select: none;
+  }
+  .form-control {
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 20px;
+    padding: 12px 14px;
+    border-radius: 6px;
+    border: 1px solid #bbb;
+    transition: border-color 0.3s;
+  }
+  .form-control:focus {
+    border-color: #ff0000;
+    box-shadow: 0 0 5px rgba(255,0,0,0.5);
+    background-color: #fff;
+  }
+  .btn-primary {
+    background-color: #ff0000;
+    border: none;
+    color: white;
+    font-weight: 900;
+    font-size: 18px;
+    padding: 12px;
+    border-radius: 8px;
+    width: 100%;
+    box-shadow: 0 5px 10px rgba(255,0,0,0.6);
+    cursor: pointer;
+    transition: background-color 0.3s;
+    user-select: none;
+  }
+  .btn-primary:hover {
+    background-color: #cc0000;
+  }
+  .login-links {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555;
+    user-select: none;
+  }
+  .login-links a {
+    color: #555;
+    text-decoration: none;
+    font-weight: 600;
+    margin: 0 8px;
+  }
+  .login-links a:hover {
+    text-decoration: underline;
+    color: #ff0000;
+  }
+  /* Home page styles */
+  .home-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .home-header h2 {
+    user-select: none;
+  }
+  .btn-logout {
+    background-color: #222;
+    color: white;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    user-select: none;
+  }
+  .btn-logout:hover {
+    background-color: #444;
+  }
+  .games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(130px,1fr));
+    gap: 16px;
+  }
+  .game-card {
+    background: #eee;
+    border-radius: 12px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    padding: 10px;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.2s;
+  }
+  .game-card:hover {
+    transform: scale(1.05);
+  }
+  .game-card img {
+    width: 100%;
+    border-radius: 8px;
+  }
+  .game-title {
+    margin-top: 8px;
+    font-weight: 700;
+    font-size: 14px;
+    color: #222;
+  }
+  .friends-list {
+    margin-top: 30px;
+    text-align: left;
+  }
+  .friends-list h3 {
+    user-select: none;
+  }
+  .friend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+    gap: 12px;
+    cursor: default;
+  }
+  .friend-item img {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+  }
+  .friend-name {
+    font-weight: 600;
+  }
+  .avatar-section {
+    margin-top: 30px;
+    text-align: center;
+    user-select: none;
+  }
+  .avatar-section h3 {
+    margin-bottom: 10px;
+  }
+  .avatar-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 12px;
+    box-shadow: 0 0 12px rgba(0,0,0,0.3);
+  }
+  .genre-chooser {
+    margin-bottom: 20px;
+    user-select: none;
+  }
+  /* Friend request notification */
+  .friend-request {
+    background: #ffeded;
+    border: 1px solid #ff5c5c;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .friend-request button {
+    background-color: #ff0000;
+    border: none;
+    color: white;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .friend-request button:hover {
+    background-color: #cc0000;
+  }
+</style>
+</head>
+<body>
+  <div class="top-bar">
+    <button class="logo-btn" id="navHomeBtn">BLOXORIA</button>
+    <div class="search-bar">
+      <input type="text" placeholder="Search Games" id="searchInput" aria-label="Search" />
+      <button class="search-btn" id="searchBtn">Search</button>
+    </div>
+  </div>
+
+  <!-- LOGIN / SIGNUP CONTAINER -->
+  <div class="container-login" id="loginSignupContainer">
+    <div class="login-card shadow-lg">
+      <h1 id="formTitle">Login to Bloxoria</h1>
+      <form id="authForm" autocomplete="off" novalidate>
+        <input type="text" class="form-control" id="username" placeholder="Username" required autofocus />
+        <input type="password" class="form-control" id="password" placeholder="Password" required />
+        <div class="genre-chooser" id="genreChooser" style="display:none;">
+          <label for="genreSelect" class="form-label fw-bold">Choose your favorite genre:</label>
+          <select id="genreSelect" class="form-select">
+            <option value="Adventure">Adventure</option>
+            <option value="RPG">RPG</option>
+            <option value="FPS">FPS</option>
+            <option value="Simulator">Simulator</option>
+            <option value="Tycoon">Tycoon</option>
+            <option value="Obby">Obby</option>
+          </select>
+        </div>
+        <button type="submit" class="btn-primary" id="submitBtn">Log In</button>
+      </form>
+      <div class="login-links mt-3" id="formToggleText">
+        Don't have an account? <a href="#" id="toggleSignup">Sign Up</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOME PAGE CONTAINER -->
+  <div class="container-home" id="homeContainer" style="display:none;">
+    <div class="home-card shadow-lg" style="max-width: 900px; width: 100%;">
+      <div class="home-header">
+        <h2>Welcome, <span id="userDisplayName"></span>!</h2>
+        <button class="btn-logout" id="logoutBtn">Log Out</button>
+      </div>
+
+      <h3>Featured Games</h3>
+      <div class="games-grid" id="gamesGrid">
+        <!-- Game cards injected by JS -->
+      </div>
+
+      <div class="friends-list">
+        <h3>Your Friends</h3>
+        <div id="friendsList">
+          <!-- Friend items injected by JS -->
+        </div>
+      </div>
+
+      <div class="avatar-section">
+        <h3>Your Avatar</h3>
+        <img id="avatarImg" src="" alt="User Avatar" class="avatar-img" />
+      </div>
+
+      <div class="friend-requests-section" style="margin-top: 30px; text-align: left; user-select: none;">
+        <h3>Friend Requests</h3>
+        <div id="friendRequestsList">
+          <!-- Incoming friend requests here -->
+        </div>
+      </div>
+
+      <div style="margin-top: 20px; text-align: left; user-select: none;">
+        <h3>Send Friend Request</h3>
+        <input type="text" id="friendRequestUsername" class="form-control" placeholder="Enter username to send request" />
+        <button class="btn-primary" id="sendFriendRequestBtn" style="margin-top: 10px; max-width: 200px;">Send Request</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+  // Sample mock data for games
+  const gamesData = [
+    {
+      id: 1,
+      title: 'Epic Adventure',
+      genre: 'Adventure',
+      thumbnail: 'https://tr.rbxcdn.com/cd0f03f588b7ad6765eb199c35d83e6a/768/432/Image/Png',
+      url: '#game1',
+    },
+    {
+      id: 2,
+      title: 'Mystic RPG',
+      genre: 'RPG',
+      thumbnail: 'https://tr.rbxcdn.com/2238ae63a0f7f6e59c3b7fcd0b30a650/768/432/Image/Png',
+      url: '#game2',
+    },
+    {
+      id: 3,
+      title: 'Shooter FPS',
+      genre: 'FPS',
+      thumbnail: 'https://tr.rbxcdn.com/b95e62d82e3a4f208e8c788867e1b82a/768/432/Image/Png',
+      url: '#game3',
+    },
+    {
+      id: 4,
+      title: 'City Simulator',
+      genre: 'Simulator',
+      thumbnail: 'https://tr.rbxcdn.com/3e4b314db8e7f6e57649c56e0e9a1f70/768/432/Image/Png',
+      url: '#game4',
+    },
+    {
+      id: 5,
+      title: 'Business Tycoon',
+      genre: 'Tycoon',
+      thumbnail: 'https://tr.rbxcdn.com/e3db18bcdfb4b6881b1579694c4268a9/768/432/Image/Png',
+      url: '#game5',
+    },
+    {
+      id: 6,
+      title: 'Fun Obby',
+      genre: 'Obby',
+      thumbnail: 'https://tr.rbxcdn.com/3ef497105bf71d4e3e48c51a8692e13d/768/432/Image/Png',
+      url: '#game6',
+    }
+  ];
+
+  // Data structure for users and friend requests in localStorage
+  // users: { username: { password, favoriteGenre, friends: [], friendRequests: [] } }
+
+  // DOM Elements
+  const loginSignupContainer = document.getElementById('loginSignupContainer');
+  const homeContainer = document.getElementById('homeContainer');
+  const authForm = document.getElementById('authForm');
+  const usernameInput = document.getElementById('username');
+  const passwordInput = document.getElementById('password');
+  const submitBtn = document.getElementById('submitBtn');
+  const toggleSignupLink = document.getElementById('toggleSignup');
+  const formTitle = document.getElementById('formTitle');
+  const formToggleText = document.getElementById('formToggleText');
+  const genreChooser = document.getElementById('genreChooser');
+  const genreSelect = document.getElementById('genreSelect');
+  const userDisplayName = document.getElementById('userDisplayName');
+  const logoutBtn = document.getElementById('logoutBtn');
+  const gamesGrid = document.getElementById('gamesGrid');
+  const friendsList = document.getElementById('friendsList');
+  const avatarImg = document.getElementById('avatarImg');
+  const friendRequestsList = document.getElementById('friendRequestsList');
+  const friendRequestUsername = document.getElementById('friendRequestUsername');
+  const sendFriendRequestBtn = document.getElementById('sendFriendRequestBtn');
+  const navHomeBtn = document.getElementById('navHomeBtn');
+  const searchInput = document.getElementById('searchInput');
+  const searchBtn = document.getElementById('searchBtn');
+
+  let isLoginMode = true;
+
+  // Utility functions for localStorage
+  function loadUsers() {
+    return JSON.parse(localStorage.getItem('bloxoriaUsers') || '{}');
+  }
+  function saveUsers(users) {
+    localStorage.setItem('bloxoriaUsers', JSON.stringify(users));
+  }
+  function saveCurrentUser(username) {
+    localStorage.setItem('bloxoriaCurrentUser', username);
+  }
+  function getCurrentUser() {
+    return localStorage.getItem('bloxoriaCurrentUser');
+  }
+  function clearCurrentUser() {
+    localStorage.removeItem('bloxoriaCurrentUser');
+  }
+
+  // Avatar generator: returns a placeholder image URL instead of robohash
+  function generateAvatarURL(username, genre) {
+    // Placeholder avatar image for all users
+    return 'https://via.placeholder.com/120?text=Avatar';
+    // Alternative silhouette avatar:
+    // return 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+  }
+
+  // Show / Hide login/signup forms
+  function toggleFormMode() {
+    isLoginMode = !isLoginMode;
+    if (isLoginMode) {
+      formTitle.textContent = 'Login to Bloxoria';
+      submitBtn.textContent = 'Log In';
+      formToggleText.innerHTML = `Don't have an account? <a href="#" id="toggleSignup">Sign Up</a>`;
+      genreChooser.style.display = 'none';
+      passwordInput.value = '';
+    } else {
+      formTitle.textContent = 'Sign Up for Bloxoria';
+      submitBtn.textContent = 'Sign Up';
+      formToggleText.innerHTML = `Already have an account? <a href="#" id="toggleSignup">Log In</a>`;
+      genreChooser.style.display = 'block';
+      passwordInput.value = '';
+    }
+    // Reattach event listener to new toggle link
+    document.getElementById('toggleSignup').addEventListener('click', e => {
+      e.preventDefault();
+      toggleFormMode();
+    });
+  }
+
+  // Render games based on optional filter genre
+  function renderGames(filterGenre = '') {
+    gamesGrid.innerHTML = '';
+    const filteredGames = filterGenre ? gamesData.filter(g => g.genre.toLowerCase().includes(filterGenre.toLowerCase())) : gamesData;
+
+    if(filteredGames.length === 0) {
+      gamesGrid.innerHTML = '<p>No games found for that genre.</p>';
+      return;
+    }
+
+    filteredGames.forEach(game => {
+      const card = document.createElement('div');
+      card.className = 'game-card';
+      card.setAttribute('tabindex', '0');
+      card.setAttribute('role', 'link');
+      card.setAttribute('aria-label', `Play ${game.title}`);
+
+      card.innerHTML = `
+        <img src="${game.thumbnail}" alt="${game.title} thumbnail" />
+        <div class="game-title">${game.title}</div>
+      `;
+      card.addEventListener('click', () => {
+        alert(`This would launch the game: ${game.title} (URL: ${game.url})`);
+      });
+      gamesGrid.appendChild(card);
+    });
+  }
+
+  // Render friends list for current user
+  function renderFriends() {
+    friendsList.innerHTML = '';
+    const users = loadUsers();
+    const currentUser = getCurrentUser();
+    if (!currentUser) return;
+    const friends = users[currentUser].friends || [];
+    if (friends.length === 0) {
+      friendsList.innerHTML = '<p>You have no friends added.</p>';
+      return;
+    }
+    friends.forEach(friendName => {
+      const friendItem = document.createElement('div');
+      friendItem.className = 'friend-item';
+      friendItem.setAttribute('tabindex', '0');
+      friendItem.setAttribute('role', 'listitem');
+      friendItem.setAttribute('aria-label', `Friend: ${friendName}`);
+
+      friendItem.innerHTML = `
+        <img src="${generateAvatarURL(friendName, users[friendName]?.favoriteGenre || '')}" alt="${friendName} avatar" />
+        <div class="friend-name">${friendName}</div>
+      `;
+      friendsList.appendChild(friendItem);
+    });
+  }
+
+  // Render current user avatar
+  function renderAvatar() {
+    const users = loadUsers();
+    const currentUser = getCurrentUser();
+    if (!currentUser) return;
+    const userGenre = users[currentUser].favoriteGenre || '';
+    avatarImg.src = generateAvatarURL(currentUser, userGenre);
+    avatarImg.alt = `${currentUser}'s avatar`;
+  }
+
+  // Render friend requests for current user
+  function renderFriendRequests() {
+    friendRequestsList.innerHTML = '';
+    const users = loadUsers();
+    const currentUser = getCurrentUser();
+    if (!currentUser) return;
+    const requests = users[currentUser].friendRequests || [];
+
+    if (requests.length === 0) {
+      friendRequestsList.innerHTML = '<p>No new friend requests.</p>';
+      return;
+    }
+
+    requests.forEach(requester => {
+      const reqDiv = document.createElement('div');
+      reqDiv.className = 'friend-request';
+      reqDiv.setAttribute('tabindex', '0');
+      reqDiv.setAttribute('role', 'region');
+      reqDiv.setAttribute('aria-label', `Friend request from ${requester}`);
+
+      reqDiv.innerHTML = `
+        <div>${requester} wants to be your friend.</div>
+        <button aria-label="Accept friend request from ${requester}">Accept</button>
+      `;
+      reqDiv.querySelector('button').addEventListener('click', () => {
+        acceptFriendRequest(requester);
+      });
+      friendRequestsList.appendChild(reqDiv);
+    });
+  }
+
+  // Accept friend request logic
+  function acceptFriendRequest(requester) {
+    const users = loadUsers();
+    const currentUser = getCurrentUser();
+    if (!currentUser) return;
+
+    // Add each other as friends if not already friends
+    if (!users[currentUser].friends.includes(requester)) {
+      users[currentUser].friends.push(requester);
+    }
+    if (!users[requester].friends.includes(currentUser)) {
+      users[requester].friends.push(currentUser);
+    }
+
+    // Remove friend request
+    users[currentUser].friendRequests = users[currentUser].friendRequests.filter(req => req !== requester);
+
+    saveUsers(users);
+    renderFriends();
+    renderFriendRequests();
+    alert(`You are now friends with ${requester}!`);
+  }
+
+  // Send friend request logic
+  sendFriendRequestBtn.addEventListener('click', () => {
+    const targetUsername = friendRequestUsername.value.trim();
+    const users = loadUsers();
+    const currentUser = getCurrentUser();
+
+    if (!currentUser) {
+      alert('You must be logged in to send friend requests.');
+      return;
+    }
+    if (!targetUsername) {
+      alert('Please enter a username to send a friend request.');
+      return;
+    }
+    if (targetUsername === currentUser) {
+      alert('You cannot send a friend request to yourself.');
+      return;
+    }
+    if (!users[targetUsername]) {
+      alert('User does not exist.');
+      return;
+    }
+    if (users[currentUser].friends.includes(targetUsername)) {
+      alert('This user is already your friend.');
+      return;
+    }
+    if (users[targetUsername].friendRequests.includes(currentUser)) {
+      alert('Friend request already sent.');
+      return;
+    }
+
+    users[targetUsername].friendRequests.push(currentUser);
+    saveUsers(users);
+    friendRequestUsername.value = '';
+    alert('Friend request sent!');
+  });
+
+  // Login or Signup form submission handler
+  authForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value;
+    const users = loadUsers();
+
+    if (!username || !password) {
+      alert('Please fill in all fields.');
+      return;
+    }
+
+    if (isLoginMode) {
+      // Login
+      if (!users[username]) {
+        alert('User not found.');
+        return;
+      }
+      if (users[username].password !== password) {
+        alert('Incorrect password.');
+        return;
+      }
+      saveCurrentUser(username);
+      showHomePage();
+    } else {
+      // Signup
+      if (users[username]) {
+        alert('Username already exists.');
+        return;
+      }
+      const favoriteGenre = genreSelect.value;
+      users[username] = {
+        password,
+        favoriteGenre,
+        friends: [],
+        friendRequests: []
+      };
+      saveUsers(users);
+      saveCurrentUser(username);
+      showHomePage();
+    }
+  });
+
+  // Show home page UI
+  function showHomePage() {
+    loginSignupContainer.style.display = 'none';
+    homeContainer.style.display = 'flex';
+
+    const currentUser = getCurrentUser();
+    const users = loadUsers();
+    if (!currentUser || !users[currentUser]) {
+      alert('User session invalid. Please log in again.');
+      logout();
+      return;
+    }
+
+    userDisplayName.textContent = currentUser;
+    renderGames();
+    renderFriends();
+    renderAvatar();
+    renderFriendRequests();
+  }
+
+  // Logout function
+  function logout() {
+    clearCurrentUser();
+    loginSignupContainer.style.display = 'flex';
+    homeContainer.style.display = 'none';
+    usernameInput.value = '';
+    passwordInput.value = '';
+    genreChooser.style.display = 'none';
+    isLoginMode = true;
+    formTitle.textContent = 'Login to Bloxoria';
+    submitBtn.textContent = 'Log In';
+    formToggleText.innerHTML = `Don't have an account? <a href="#" id="toggleSignup">Sign Up</a>`;
+
+    // Reattach toggle event listener after reset
+    document.getElementById('toggleSignup').addEventListener('click', e => {
+      e.preventDefault();
+      toggleFormMode();
+    });
+  }
+
+  // Search functionality
+  searchBtn.addEventListener('click', () => {
+    const query = searchInput.value.trim();
+    renderGames(query);
+  });
+
+  // Pressing Enter in search input triggers search
+  searchInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      searchBtn.click();
+    }
+  });
+
+  // Clicking logo navigates home
+  navHomeBtn.addEventListener('click', () => {
+    const currentUser = getCurrentUser();
+    if (currentUser) {
+      showHomePage();
+    } else {
+      logout();
+    }
+  });
+
+  // Toggle form mode link listener
+  toggleSignupLink.addEventListener('click', e => {
+    e.preventDefault();
+    toggleFormMode();
+  });
+
+  // Initial check if user is logged in
+  window.addEventListener('load', () => {
+    if (getCurrentUser()) {
+      showHomePage();
+    }
+  });
+</script>
+</body>
+</html>
